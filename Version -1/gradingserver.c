@@ -28,7 +28,7 @@ void makeCFile(const char* sourceCode){
 }
 
 void compileExecuteFile(){
-	char compileCommand[256];
+    char compileCommand[256];
     int stderr_fd = dup(2);
     close(2);
     int err_fd = open("error.txt",O_WRONLY | O_CREAT | O_TRUNC , S_IRWXU);
@@ -152,36 +152,26 @@ int main(int argc, char *argv[]){
         fread(buffer, 1, sizeof(buffer), sourceFile);
         fclose(sourceFile);
     }else{
+    	int stdout_fd = dup(1);	
+    	close(1);
+    	int out_fd = open("diff.txt",O_WRONLY | O_CREAT | O_TRUNC , S_IRWXU);
+        printf("OUTPUT ERROR\n");
     	int result = system("diff actual.txt output.txt");
-
-	    if(result==0){
-	    	/*Loading The File*/
-  			FILE* sourceFile = fopen("pass.txt", "r");
-    		if (sourceFile == NULL) {
-      		  	perror("Error opening Pass.txt");
-        		close(sockfd);
-        		return 1;
-    		}
-  			fread(buffer, 1, sizeof(buffer), sourceFile);
-  			fclose(sourceFile);
+	close(out_fd);
+	dup2(stdout_fd,1);
+	if(result==0){
+	    	sprintf(buffer,"PASS\n");
         }else{
-	    	int stdout_fd = dup(1);		
-    		close(1);
-    		int out_fd = open("diff.txt",O_WRONLY | O_CREAT | O_TRUNC , S_IRWXU);
-            printf("OUTPUT ERROR\n");
-            result = system("diff actual.txt output.txt");
-		    close(out_fd);
-   			dup2(stdout_fd,1);
-   			/*Loading The File*/
-  			FILE* sourceFile = fopen("diff.txt", "r");
+		/*Loading The File*/
+  		FILE* sourceFile = fopen("diff.txt", "r");
     		if (sourceFile == NULL) {
-      		  	perror("Error opening source code file");
-        		close(sockfd);
-        		return 1;
+    		  perror("Error opening source code file");
+        	  close(sockfd);
+        	  return 1;
     		}
-  			fread(buffer, 1, sizeof(buffer), sourceFile);
-  			fclose(sourceFile);
-  	    }
+  		fread(buffer, 1, sizeof(buffer), sourceFile);
+  		fclose(sourceFile);
+ 	}
     }
     /*Message Stored :-- Operation Complete*/
 
