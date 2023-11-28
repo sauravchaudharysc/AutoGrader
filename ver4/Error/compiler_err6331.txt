@@ -1,0 +1,10 @@
+CPP/file6331.cpp:8:2: warning: null character(s) ignored
+    8 | } 
+      |  ^
+CPP/file6331.cpp: In function ‘int main()’:
+CPP/file6331.cpp:6:35: error: expected ‘;’ before ‘return’
+    6 |     cout << "1 2 3 4 5 6 7 8 9 10"
+      |                                   ^
+      |                                   ;
+    7 |     return 0;
+      |     ~~~~~~                         

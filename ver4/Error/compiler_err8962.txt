@@ -1,0 +1,3 @@
+CPP/file8962.cpp:11:1: warning: null character(s) ignored
+   11 |  
+      | ^
