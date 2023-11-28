@@ -13,7 +13,7 @@ In all versions, the server will always be run as follows,
 
 and the client will always be run as follows, 
 
-`$./submit  <serverIP:port>  <sourceCodeFileTobeGraded>`
+`$./submit  <serverIP> <port> <sourceCodeFileTobeGraded>`
 
 and will get back one of the following responses from the server:
 1.  PASS

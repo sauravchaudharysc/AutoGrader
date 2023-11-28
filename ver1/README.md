@@ -1,6 +1,16 @@
 # AutoGrader
 ## Version 1
 
+### SETUP
+The server will run as follows,
+
+`$./server  <port>`
+
+and the client will run as follows, 
+
+`$./submit  <serverIP:port>  <sourceCodeFileTobeGraded>`
+
+
 ### `Server`
 In gradingserver.c we receive the portno from the command line.
 
@@ -17,4 +27,6 @@ In gradingclient.c we receive the serverIp , portno and name of file to be grade
 
 We first create the socket, fill in the server address and then connect to server. 
 
-After successfull connection, we read the file either wholly and write it at sockfd(Socket which connects client and server) or we can perform the file read line by line and on side writing the information on sockfd line by line
+After successfull connection, we read the file either wholly and write it at sockfd(Socket which connects client and server) .
+
+
