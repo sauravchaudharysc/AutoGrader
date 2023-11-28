@@ -37,21 +37,8 @@ The server architecture has evolved from a single-threaded model to a multi-thre
 The program usage is modified to incorporate the asynchronous grading model. The server now seamlessly manages grading tasks and provides status updates without blocking clients.
 
 ```bash
-./submit <serverIP:port> <sourceCodeFileToBeGraded> <sleepTimeSeconds> <timeoutSeconds> <loopNum> <requestID>
+./server <port> <threads>
 ```
-#### Usage Parameters
-
-- **serverIP:port:** IP address and port of the grading server.
-
-- **sourceCodeFileToBeGraded:** Path to the source code file to be graded.
-
-- **sleepTimeSeconds:** Sleep time in seconds before sending the request.
-
-- **timeoutSeconds:** Timeout duration in seconds.
-
-- **loopNum:** Number of times to repeat the grading request.
-
-- **requestID:** Unique identifier for checking the status of the grading request.
 
 
 # Client
@@ -65,7 +52,7 @@ The client-server interaction is modified to accommodate the asynchronous gradin
 The program usage is updated to include the new asynchronous features. Clients can now initiate grading requests, receive quick responses, and check the status of the grading task later.
 
 ```bash
-./submit <serverIP:port> <sourceCodeFileToBeGraded> <sleepTimeSeconds> <timeoutSeconds> <loopNum> <requestID>
+./submit  <serverIP> <port> <requestType> <sourceCodeFileTobeGraded>
 ```
 
 
