@@ -5,7 +5,7 @@ In this project we will step-by-step build a scalable program autograding server
 We can assume that the purpose of the submitted program is simply to print the first ten numbers:
 1 2 3 4 5 6 7 8 9 10
 
-If the submitted program prints this output, it has passed, else it has failed. You may assume the programming language to be either C or C++.
+If the submitted program prints this output, it has passed, else it has failed. The programming language assumed is C.
 
 In all versions, the server will always be run as follows,
 
