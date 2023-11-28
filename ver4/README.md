@@ -39,7 +39,7 @@ The program usage is modified to incorporate the asynchronous grading model. The
 ```bash
 ./submit <serverIP:port> <sourceCodeFileToBeGraded> <sleepTimeSeconds> <timeoutSeconds> <loopNum> <requestID>
 ```
-# Usage Parameters
+#### Usage Parameters
 
 - **serverIP:port:** IP address and port of the grading server.
 
@@ -52,4 +52,20 @@ The program usage is modified to incorporate the asynchronous grading model. The
 - **loopNum:** Number of times to repeat the grading request.
 
 - **requestID:** Unique identifier for checking the status of the grading request.
+
+
+# Client README
+
+## Asynchronous Grading
+
+The client-server interaction is modified to accommodate the asynchronous grading architecture. Clients no longer wait for the entire grading process, allowing for more flexibility during unpredictable runtimes.
+
+## Program Usage Update
+
+The program usage is updated to include the new asynchronous features. Clients can now initiate grading requests, receive quick responses, and check the status of the grading task later.
+
+```bash
+./submit <serverIP:port> <sourceCodeFileToBeGraded> <sleepTimeSeconds> <timeoutSeconds> <loopNum> <requestID>
+```
+
 
