@@ -1,19 +1,18 @@
 all: client server
 
 client: submit.c
-		gcc -o client submit.c
+		gcc -o submit submit.c
 
-server: ./Server/gradingMTServerQ.c server.o 
-		gcc -o server2 ./Server/gradingMTServerQ.c server.o
-
-server.o: ./Server/server.c ./Server/server.h 
-		gcc -c ./Server/server.c
+server: ./Server/gradingMTServerQ.c ./Server/server.c 
+		gcc -o server ./Server/gradingMTServerQ.c ./Server/server.c
 
 runserver: server
 		./server 8080 10
 
 clean:
-		rm -f client server2
-		rm -f ./dummy/*
-		rm -f ./outputs/*
+		rm -f submit server
+		rm -f ./Error/*
+		rm -f ./CPP/*
+		rm -f ./data/*
+		rm -f ./Output/*
 		rm -f *.o

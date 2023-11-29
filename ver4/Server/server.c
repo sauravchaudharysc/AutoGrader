@@ -31,10 +31,11 @@ int searchRequestID(int targetID, const char* filename) {
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), file) != NULL) {
         struct LogEntry entry;
-        if (sscanf(line, "%d %d %s %s", &entry.ID, &entry.TimeStamp, entry.Status, entry.Result) == 4) {
+        if (sscanf(line, "%d %d %s %s", &entry.ID, &entry.TimeStamp, entry.Status, entry.Result) == 4) {	
+            //printf("%d %d %s %s\n", entry.ID, entry.TimeStamp, entry.Status, entry.Result);
             if (entry.ID == targetID) {
                 if(strcmp(entry.Status,"Done")==0){
-                	if(strcmp(entry.Result,"SUCESSF")==0){
+                	if(strcmp(entry.Result,"SUCESSFUL")==0){
                 		return 2;
                 	}else if(strcmp(entry.Result,"COMPILE")==0){
                 		return 3;
@@ -89,7 +90,8 @@ int recv_file(int sockfd, char* file_path)
 		return -1;
 	    }
 	    int targetID=atoi(reqId);
-	    int fileStatus=searchRequestID(targetID,"./data/request_file.txt");
+	    int fileStatus=searchRequestID(targetID,"./data/status_file.txt");
+	    
 	    if(fileStatus==1){ 
 	    	send(sockfd,"Try Later\n",sizeof("Try Later\n"),0);
 	    	close(sockfd);
@@ -275,13 +277,22 @@ char *makeExecFileName(int id) {
 } 
 
 void change_status_reqfile(int req_id,char* status, char* result, pthread_mutex_t request_file_lock){
-    pthread_mutex_lock(&request_file_lock);
+    pthread_mutex_t status_file_lock;
+    pthread_mutex_init(&status_file_lock,NULL);
+    pthread_mutex_lock(&status_file_lock);
     FILE *file = fopen("data/request_file.txt", "r+");
     if (file == NULL) {
         perror("Failed to open the file");
-        pthread_mutex_unlock(&request_file_lock);
+        pthread_mutex_unlock(&status_file_lock);
         return;
     }
+    int fileDescriptor = open("data/status_file.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);
+
+    if (fileDescriptor == -1) {
+        perror("Error opening the file");
+        return; // Return an error code
+    }
+    
     int found = 0; // To track if the request ID is found
     char requestID[256];
     char timestamp[256];
@@ -289,24 +300,17 @@ void change_status_reqfile(int req_id,char* status, char* result, pthread_mutex_
     char fresult[256];
     char firstLine[256];
     while (fscanf(file, "%13s %14s %11s %15s", requestID, timestamp, fstatus, fresult)==4) {
-       // printf("%13s %14s %11s %14s\n", requestID, timestamp, fstatus, fresult);
         if (atoi(requestID) == req_id) {
             found = 1;
-            // Update the status and result in memory
-            if(status)
-                snprintf(fstatus, sizeof(status), "%s", status);
-            if(result)
-                snprintf(fresult, sizeof(result), "%s", result);
-            // Move the file pointer to the beginning of the line
-            fseek(file, -51, SEEK_CUR);
-            // Write the updated line to the file
-            fprintf(file, "%-13s%-14s%-11s%-14s\n", requestID, timestamp, fstatus, fresult);
+            char data [2005];
+            sprintf(data,"%-13s %-14s %-11s %-14s\n", requestID, timestamp, status, result);
+            int x=write(fileDescriptor, data, strlen(data));
             break; // No need to continue reading the file
         }
     }
     if(!found)
         printf("Request ID %d not found in the file\n", req_id);
     fclose(file);
-    pthread_mutex_unlock(&request_file_lock);
+    pthread_mutex_unlock(&status_file_lock);
 }
 
